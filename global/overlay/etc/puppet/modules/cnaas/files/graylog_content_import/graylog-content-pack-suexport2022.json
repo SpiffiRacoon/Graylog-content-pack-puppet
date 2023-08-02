@@ -1,0 +1,844 @@
+{
+  "v": 1,
+  "id": "b6454867-47ef-4cbb-8ce6-a521e77e171a",
+  "rev": 1,
+  "name": "su-export-2022",
+  "summary": "all",
+  "description": "",
+  "vendor": "sunet",
+  "url": "",
+  "parameters": [],
+  "entities": [
+    {
+      "v": "1",
+      "type": {
+        "name": "notification",
+        "version": "1"
+      },
+      "id": "bba0ae10-fdad-456f-826f-376aeaba96de",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "[SU] Device configured by admin"
+        },
+        "description": {
+          "@type": "string",
+          "@value": "Notify via slack that someone configured a device outside of nms"
+        },
+        "config": {
+          "icon_emoji": {
+            "@type": "string",
+            "@value": ""
+          },
+          "channel": {
+            "@type": "string",
+            "@value": "#cnaas-notifications"
+          },
+          "link_names": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "color": {
+            "@type": "string",
+            "@value": "#FF0000"
+          },
+          "webhook_url": {
+            "@type": "string",
+            "@value": "https://hooks.slack.com/services/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"
+          },
+          "icon_url": {
+            "@type": "string",
+            "@value": ""
+          },
+          "notify_channel": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "custom_message": {
+            "@type": "string",
+            "@value": "Title:       ${event_definition_title}\nTimestamp:            ${event.timestamp}\nMessage:              ${event.message}\n${foreach event.fields field}\n${field.key}: ${field.value}\n${end}\n${if backlog}\nLast messages accounting for this alert:\n${foreach backlog message}\n${message.timestamp}  ::  ${message.source}  ::  ${message.message}\n${message.message}\n${end}${end}\n"
+          },
+          "type": "slack-notification-v1",
+          "user_name": {
+            "@type": "string",
+            "@value": "SU Graylog"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "event_definition",
+        "version": "1"
+      },
+      "id": "9863e58e-2642-42fb-910e-b85a7f6e22b1",
+      "data": {
+        "field_spec": {},
+        "config": {
+          "type": "aggregation-v1",
+          "query": {
+            "@type": "string",
+            "@value": "message: (\"%SYS-5-CONFIG_SESSION_COMMIT_SUCCESS\" OR \"%SYS-5-CONFIG_I\") AND NOT (message:\"User nms\" OR message:\"by nms\")"
+          },
+          "streams": [
+            "000000000000000000000001"
+          ],
+          "group_by": [],
+          "series": [],
+          "conditions": {
+            "expression": null
+          },
+          "search_within_ms": 60000,
+          "execute_every_ms": 60000
+        },
+        "priority": {
+          "@type": "integer",
+          "@value": 1
+        },
+        "notifications": [
+          {
+            "notification_id": {
+              "@type": "string",
+              "@value": "bba0ae10-fdad-456f-826f-376aeaba96de"
+            },
+            "notification_parameters": null
+          }
+        ],
+        "notification_settings": {
+          "grace_period_ms": 60000,
+          "backlog_size": 1
+        },
+        "title": {
+          "@type": "string",
+          "@value": "Device configured by admin"
+        },
+        "is_scheduled": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "key_spec": [],
+        "storage": [
+          {
+            "type": "persist-to-streams-v1",
+            "streams": [
+              "000000000000000000000002"
+            ]
+          }
+        ],
+        "alert": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "description": {
+          "@type": "string",
+          "@value": "Device configured outside of NMS"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "event_definition",
+        "version": "1"
+      },
+      "id": "50004add-f4f0-4354-b5b6-9d547f844f36",
+      "data": {
+        "field_spec": {},
+        "config": {
+          "type": "aggregation-v1",
+          "query": {
+            "@type": "string",
+            "@value": "(\"perfsonar-probe\" AND \"succeeded\\\": false\")"
+          },
+          "streams": [
+            "000000000000000000000001"
+          ],
+          "group_by": [],
+          "series": [],
+          "conditions": {
+            "expression": null
+          },
+          "search_within_ms": 60000,
+          "execute_every_ms": 60000
+        },
+        "priority": {
+          "@type": "integer",
+          "@value": 3
+        },
+        "notifications": [
+          {
+            "notification_id": {
+              "@type": "string",
+              "@value": "54873995-7c8b-4d19-bf4a-1362b7b99ad8"
+            },
+            "notification_parameters": null
+          }
+        ],
+        "notification_settings": {
+          "grace_period_ms": 0,
+          "backlog_size": 1
+        },
+        "title": {
+          "@type": "string",
+          "@value": "perfSONAR - test fail"
+        },
+        "is_scheduled": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "key_spec": [],
+        "storage": [
+          {
+            "type": "persist-to-streams-v1",
+            "streams": [
+              "000000000000000000000002"
+            ]
+          }
+        ],
+        "alert": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "description": {
+          "@type": "string",
+          "@value": ""
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "notification",
+        "version": "1"
+      },
+      "id": "b330f36c-2593-4f87-b70a-ef8f56296a78",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "[SU] RADIUS unreachable"
+        },
+        "description": {
+          "@type": "string",
+          "@value": "Notify people if the RADIUS server is unreachable."
+        },
+        "config": {
+          "icon_emoji": {
+            "@type": "string",
+            "@value": ""
+          },
+          "channel": {
+            "@type": "string",
+            "@value": "#cnaas-notifications"
+          },
+          "link_names": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "color": {
+            "@type": "string",
+            "@value": "#FF0000"
+          },
+          "webhook_url": {
+            "@type": "string",
+            "@value": "https://hooks.slack.com/services/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"
+          },
+          "icon_url": {
+            "@type": "string",
+            "@value": ""
+          },
+          "notify_channel": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "custom_message": {
+            "@type": "string",
+            "@value": "--- [Event Definition] ---------------------------\nTitle:       ${event_definition_title}\nType:        ${event_definition_type}\n--- [Event] --------------------------------------\nTimestamp:            ${event.timestamp}\nMessage:              ${event.message}\nSource:               ${event.source}\nKey:                  ${event.key}\nPriority:             ${event.priority}\nAlert:                ${event.alert}\nTimestamp Processing: ${event.timestamp}\nTimerange Start:      ${event.timerange_start}\nTimerange End:        ${event.timerange_end}\nEvent Fields:\n${foreach event.fields field}\n${field.key}: ${field.value}\n${end}\n${if backlog}\n--- [Backlog] ------------------------------------\nLast messages accounting for this alert:\n${foreach backlog message}\n${message.timestamp}  ::  ${message.source}  ::  ${message.message}\n${message.message}\n${end}${end}\n"
+          },
+          "type": "slack-notification-v1",
+          "user_name": {
+            "@type": "string",
+            "@value": "Graylog"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "notification",
+        "version": "1"
+      },
+      "id": "92d3dc38-fc92-41b2-9ade-a6f24e84dcd1",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "[SU] ZTP DHCPd error"
+        },
+        "description": {
+          "@type": "string",
+          "@value": "ZTP DHCPd error"
+        },
+        "config": {
+          "icon_emoji": {
+            "@type": "string",
+            "@value": ""
+          },
+          "channel": {
+            "@type": "string",
+            "@value": "#cnaas-notifications"
+          },
+          "link_names": {
+            "@type": "boolean",
+            "@value": true
+          },
+          "color": {
+            "@type": "string",
+            "@value": "#FF0000"
+          },
+          "webhook_url": {
+            "@type": "string",
+            "@value": "https://hooks.slack.com/services/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"
+          },
+          "icon_url": {
+            "@type": "string",
+            "@value": ""
+          },
+          "notify_channel": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "custom_message": {
+            "@type": "string",
+            "@value": "--- [Event Definition] ---------------------------\nTitle:       ${event_definition_title}\nType:        ${event_definition_type}\n--- [Event] --------------------------------------\nTimestamp:            ${event.timestamp}\nMessage:              ${event.message}\nSource:               ${event.source}\nKey:                  ${event.key}\nPriority:             ${event.priority}\nAlert:                ${event.alert}\nTimestamp Processing: ${event.timestamp}\nTimerange Start:      ${event.timerange_start}\nTimerange End:        ${event.timerange_end}\nEvent Fields:\n${foreach event.fields field}\n${field.key}: ${field.value}\n${end}\n${if backlog}\n--- [Backlog] ------------------------------------\nLast messages accounting for this alert:\n${foreach backlog message}\n${message.timestamp}  ::  ${message.source}  ::  ${message.message}\n${message.message}\n${end}${end}"
+          },
+          "type": "slack-notification-v1",
+          "user_name": {
+            "@type": "string",
+            "@value": "Graylog"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "event_definition",
+        "version": "1"
+      },
+      "id": "d28fb9f6-c938-401a-b05f-3ed4b9b360cb",
+      "data": {
+        "field_spec": {},
+        "config": {
+          "type": "aggregation-v1",
+          "query": {
+            "@type": "string",
+            "@value": "\"exited: dhcpd (exit status 1; not expected)\""
+          },
+          "streams": [
+            "000000000000000000000001"
+          ],
+          "group_by": [],
+          "series": [],
+          "conditions": {
+            "expression": null
+          },
+          "search_within_ms": 60000,
+          "execute_every_ms": 60000
+        },
+        "priority": {
+          "@type": "integer",
+          "@value": 2
+        },
+        "notifications": [
+          {
+            "notification_id": {
+              "@type": "string",
+              "@value": "92d3dc38-fc92-41b2-9ade-a6f24e84dcd1"
+            },
+            "notification_parameters": null
+          }
+        ],
+        "notification_settings": {
+          "grace_period_ms": 300000,
+          "backlog_size": 1
+        },
+        "title": {
+          "@type": "string",
+          "@value": "DHCPd exited"
+        },
+        "is_scheduled": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "key_spec": [],
+        "storage": [
+          {
+            "type": "persist-to-streams-v1",
+            "streams": [
+              "000000000000000000000002"
+            ]
+          }
+        ],
+        "alert": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "description": {
+          "@type": "string",
+          "@value": "dhcpd unexpected exit status"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "event_definition",
+        "version": "1"
+      },
+      "id": "0adaedc2-689a-4610-a24a-1413298c0c5c",
+      "data": {
+        "field_spec": {},
+        "config": {
+          "type": "aggregation-v1",
+          "query": {
+            "@type": "string",
+            "@value": "\"EVPN-3-BLACKLISTED_DUPLICATE_MAC\""
+          },
+          "streams": [
+            "000000000000000000000001"
+          ],
+          "group_by": [],
+          "series": [],
+          "conditions": {
+            "expression": null
+          },
+          "search_within_ms": 60000,
+          "execute_every_ms": 60000
+        },
+        "priority": {
+          "@type": "integer",
+          "@value": 2
+        },
+        "notifications": [
+          {
+            "notification_id": {
+              "@type": "string",
+              "@value": "f3786660-974c-43ed-89f4-53cf080d1a1f"
+            },
+            "notification_parameters": null
+          }
+        ],
+        "notification_settings": {
+          "grace_period_ms": 0,
+          "backlog_size": 1
+        },
+        "title": {
+          "@type": "string",
+          "@value": "EVPN Blacklist MAC"
+        },
+        "is_scheduled": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "key_spec": [],
+        "storage": [
+          {
+            "type": "persist-to-streams-v1",
+            "streams": [
+              "000000000000000000000002"
+            ]
+          }
+        ],
+        "alert": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "description": {
+          "@type": "string",
+          "@value": "MAC blacklisted"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "event_definition",
+        "version": "1"
+      },
+      "id": "22c9d3ab-c5f2-4420-8242-ee9b7730217e",
+      "data": {
+        "field_spec": {},
+        "config": {
+          "type": "aggregation-v1",
+          "query": {
+            "@type": "string",
+            "@value": "message:\"*Authentication method 'group radius' is currently unavailable; falling back to next method.*\""
+          },
+          "streams": [
+            "000000000000000000000001"
+          ],
+          "group_by": [],
+          "series": [],
+          "conditions": {
+            "expression": null
+          },
+          "search_within_ms": 60000,
+          "execute_every_ms": 60000
+        },
+        "priority": {
+          "@type": "integer",
+          "@value": 3
+        },
+        "notifications": [
+          {
+            "notification_id": {
+              "@type": "string",
+              "@value": "b330f36c-2593-4f87-b70a-ef8f56296a78"
+            },
+            "notification_parameters": null
+          }
+        ],
+        "notification_settings": {
+          "grace_period_ms": 0,
+          "backlog_size": 1
+        },
+        "title": {
+          "@type": "string",
+          "@value": "RADIUS unreachable"
+        },
+        "is_scheduled": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "key_spec": [],
+        "storage": [
+          {
+            "type": "persist-to-streams-v1",
+            "streams": [
+              "000000000000000000000002"
+            ]
+          }
+        ],
+        "alert": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "description": {
+          "@type": "string",
+          "@value": ""
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "notification",
+        "version": "1"
+      },
+      "id": "f3786660-974c-43ed-89f4-53cf080d1a1f",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "[SU] EVPN Blacklisted MAC"
+        },
+        "description": {
+          "@type": "string",
+          "@value": "Trigger on Bgp: %EVPN-3-BLACKLISTED_DUPLICATE_MAC\nClear with: #clear bgp evpn host-\"ap"
+        },
+        "config": {
+          "icon_emoji": {
+            "@type": "string",
+            "@value": ""
+          },
+          "channel": {
+            "@type": "string",
+            "@value": "#cnaas-notifications"
+          },
+          "link_names": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "color": {
+            "@type": "string",
+            "@value": "#FF0000"
+          },
+          "webhook_url": {
+            "@type": "string",
+            "@value": "https://hooks.slack.com/services/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"
+          },
+          "icon_url": {
+            "@type": "string",
+            "@value": ""
+          },
+          "notify_channel": {
+            "@type": "boolean",
+            "@value": true
+          },
+          "custom_message": {
+            "@type": "string",
+            "@value": "--- [Event Definition] ---------------------------\nTitle:       ${event_definition_title}\nType:        ${event_definition_type}\n--- [Event] --------------------------------------\nTimestamp:            ${event.timestamp}\nMessage:              ${event.message}\nSource:               ${event.source}\nKey:                  ${event.key}\nPriority:             ${event.priority}\nAlert:                ${event.alert}\nTimestamp Processing: ${event.timestamp}\nTimerange Start:      ${event.timerange_start}\nTimerange End:        ${event.timerange_end}\nEvent Fields:\n${foreach event.fields field}\n${field.key}: ${field.value}\n${end}\n${if backlog}\n--- [Backlog] ------------------------------------\nLast messages accounting for this alert:\n${foreach backlog message}\n${message.timestamp}  ::  ${message.source}  ::  ${message.message}\n${message.message}\n${end}${end}"
+          },
+          "type": "slack-notification-v1",
+          "user_name": {
+            "@type": "string",
+            "@value": "Graylog"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "notification",
+        "version": "1"
+      },
+      "id": "54873995-7c8b-4d19-bf4a-1362b7b99ad8",
+      "data": {
+        "title": {
+          "@type": "string",
+          "@value": "[SU] perfSONAR - Test fail"
+        },
+        "description": {
+          "@type": "string",
+          "@value": ""
+        },
+        "config": {
+          "icon_emoji": {
+            "@type": "string",
+            "@value": ""
+          },
+          "channel": {
+            "@type": "string",
+            "@value": "#cnaas-notifications"
+          },
+          "link_names": {
+            "@type": "boolean",
+            "@value": true
+          },
+          "color": {
+            "@type": "string",
+            "@value": "#FF0000"
+          },
+          "webhook_url": {
+            "@type": "string",
+            "@value": "https://hooks.slack.com/services/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"
+          },
+          "icon_url": {
+            "@type": "string",
+            "@value": ""
+          },
+          "notify_channel": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "custom_message": {
+            "@type": "string",
+            "@value": "--- [Event Definition] ---------------------------\nTitle:       ${event_definition_title}\nType:        ${event_definition_type}\n--- [Event] --------------------------------------\nTimestamp:            ${event.timestamp}\nMessage:              ${event.message}\nSource:               ${event.source}\nKey:                  ${event.key}\nPriority:             ${event.priority}\nAlert:                ${event.alert}\nTimestamp Processing: ${event.timestamp}\nTimerange Start:      ${event.timerange_start}\nTimerange End:        ${event.timerange_end}\nEvent Fields:\n${foreach event.fields field}\n${field.key}: ${field.value}\n${end}\n${if backlog}\n--- [Backlog] ------------------------------------\nLast messages accounting for this alert:\n${foreach backlog message}\n${message.timestamp}  ::  ${message.source}  ::  ${message.message}\n${message.message}\n${end}${end}\n"
+          },
+          "type": "slack-notification-v1",
+          "user_name": {
+            "@type": "string",
+            "@value": "Graylog"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "event_definition",
+        "version": "1"
+      },
+      "id": "96fb66fd-de6c-4868-b07c-558d51b1a64e",
+      "data": {
+        "field_spec": {},
+        "config": {
+          "type": "aggregation-v1",
+          "query": {
+            "@type": "string",
+            "@value": "message:\"*failed authentication*\" "
+          },
+          "streams": [
+            "000000000000000000000001"
+          ],
+          "group_by": [],
+          "series": [],
+          "conditions": {
+            "expression": null
+          },
+          "search_within_ms": 180000,
+          "execute_every_ms": 180000
+        },
+        "priority": {
+          "@type": "integer",
+          "@value": 3
+        },
+        "notifications": [],
+        "notification_settings": {
+          "grace_period_ms": 0,
+          "backlog_size": 0
+        },
+        "title": {
+          "@type": "string",
+          "@value": "Authentication fails"
+        },
+        "is_scheduled": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "key_spec": [],
+        "storage": [
+          {
+            "type": "persist-to-streams-v1",
+            "streams": [
+              "000000000000000000000002"
+            ]
+          }
+        ],
+        "alert": {
+          "@type": "boolean",
+          "@value": false
+        },
+        "description": {
+          "@type": "string",
+          "@value": ""
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "event_definition",
+        "version": "1"
+      },
+      "id": "480df694-926c-4800-8897-6943d17f3a8a",
+      "data": {
+        "field_spec": {},
+        "config": {
+          "type": "aggregation-v1",
+          "query": {
+            "@type": "string",
+            "@value": "message: \"Some configured settings are undefined in model\""
+          },
+          "streams": [
+            "000000000000000000000001"
+          ],
+          "group_by": [],
+          "series": [],
+          "conditions": {
+            "expression": null
+          },
+          "search_within_ms": 300000,
+          "execute_every_ms": 300000
+        },
+        "priority": {
+          "@type": "integer",
+          "@value": 1
+        },
+        "notifications": [],
+        "notification_settings": {
+          "grace_period_ms": 0,
+          "backlog_size": 0
+        },
+        "title": {
+          "@type": "string",
+          "@value": "Undefined setting"
+        },
+        "is_scheduled": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "key_spec": [],
+        "storage": [
+          {
+            "type": "persist-to-streams-v1",
+            "streams": [
+              "000000000000000000000002"
+            ]
+          }
+        ],
+        "alert": {
+          "@type": "boolean",
+          "@value": false
+        },
+        "description": {
+          "@type": "string",
+          "@value": ""
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.2.5+59802bf"
+        }
+      ]
+    }
+  ]
+}
