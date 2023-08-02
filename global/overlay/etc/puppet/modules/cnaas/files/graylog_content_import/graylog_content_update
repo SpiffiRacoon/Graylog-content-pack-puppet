@@ -1,10 +1,11 @@
 #!/bin/bash
 # $1 = pass, $2 = content_pack $3 = content_pack_id, $4 = revision, $5 = installation_id, $6 = installed_revision, $7 = install_content_parameters
+
+# Only updates the content-pack when a new revision is to be installed. This should also work if you downgrade the version nummber
 if [ $4 -ne $6 ]
 then
+    # Removes old installation, Uploads the content pack revision and then installs the new revision
     curl -u "admin:$1" -H 'Accept: application/json' -H 'Content-Type: application/json' -H 'X-Requested-By: cli' -X DELETE "http://localhost:80/api/system/content_packs/$3/installations/$5"
     curl -u "admin:$1" -H 'Content-Type: application/json' -H 'X-Requested-By: cli' -X POST 'http://localhost:80/api/system/content_packs' -d "@/etc/puppet/modules/cnaas/files/graylog_content_import/$2.json"
-    test=$(curl -u "admin:$1" -H 'Content-Type: application/json' -H 'X-Requested-By: cli' -X POST "http://localhost:80/api/system/content_packs/$3/$4/installations" -d "$7")
-
-    wall "$test"
+    curl -u "admin:$1" -H 'Content-Type: application/json' -H 'X-Requested-By: cli' -X POST "http://localhost:80/api/system/content_packs/$3/$4/installations" -d "$7"
 fi
